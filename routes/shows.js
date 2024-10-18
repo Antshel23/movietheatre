@@ -23,4 +23,26 @@ showsRouter.get('/:id/users', async (req, res) => {
     res.json(showUsers)
 })
 
+showsRouter.put('/:id/:state', async (req, res) => {
+    const {id, state} = req.params
+    const showId = await Show.findByPk(id)
+
+    if (!showId) {
+        return res.status(404).json({message: 'Show does not exist'})
+    }
+
+
+    if (state === 'available') {
+        await showId.update({available: true})
+        return res.status(200).json({message: 'Updated!'})
+    }
+    else if (state === 'unavailable') {
+        await showId.update({available: false})
+        return res.status(200).json({message: 'Updated!'})
+    }
+    else {
+        return res.status(404).json({message: 'Please use available or unavailable to declare'})
+    }
+})
+
 module.exports = showsRouter
