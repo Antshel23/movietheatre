@@ -31,7 +31,6 @@ showsRouter.put('/:id/:state', async (req, res) => {
         return res.status(404).json({message: 'Show does not exist'})
     }
 
-
     if (state === 'available') {
         await showId.update({available: true})
         return res.status(200).json({message: 'Updated!'})
@@ -43,6 +42,15 @@ showsRouter.put('/:id/:state', async (req, res) => {
     else {
         return res.status(404).json({message: 'Please use available or unavailable to declare'})
     }
+})
+
+showsRouter.delete('/:id', async (req,res) => {
+    const showId = await Show.findByPk(req.params.id)
+    if (!showId) {
+        return res.status(404).json({message: 'Show does not exist'})
+    }
+    await showId.destroy()
+    return res.status(200).json({message: 'Deleted!'})
 })
 
 module.exports = showsRouter
