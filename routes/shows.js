@@ -14,7 +14,6 @@ showsRouter.get('/:id', async (req, res) => {
     res.json(show1)
 })
 
-
 //get shows with users
 showsRouter.get('/:id/users', async (req, res) => {
     const showUsers = await Show.findByPk(req.params.id, {
@@ -23,10 +22,23 @@ showsRouter.get('/:id/users', async (req, res) => {
     res.json(showUsers)
 })
 
+//get shows with genre
+showsRouter.get('/:genre', async (req,res) => {
+    const genre1 = req.params.genre
+const showsWithGenre = await Show.findAll({where: {genre: genre1}})
+if (showsWithGenre.length > 0) {
+    return res.status(200).json(showsWithGenre)
+}
+else {
+    return res.status(404).json({message: 'Genre does not exist'})
+}
+})
+
+
+//put show available to true or false
 showsRouter.put('/:id/:state', async (req, res) => {
     const {id, state} = req.params
     const showId = await Show.findByPk(id)
-
     if (!showId) {
         return res.status(404).json({message: 'Show does not exist'})
     }
@@ -44,6 +56,7 @@ showsRouter.put('/:id/:state', async (req, res) => {
     }
 })
 
+// delete show
 showsRouter.delete('/:id', async (req,res) => {
     const showId = await Show.findByPk(req.params.id)
     if (!showId) {
