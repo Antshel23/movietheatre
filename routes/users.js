@@ -7,4 +7,9 @@ usersRouter.get('/', async (req, res) => {
     res.json(users)
 })
 
+usersRouter.get('/:id', async (req, res) => {
+    const user1 = await User.findByPk(req.params.id)
+    res.json(user1)
+})
+
 module.exports = usersRouter

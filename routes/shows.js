@@ -7,4 +7,9 @@ showsRouter.get('/', async (req, res) => {
     res.json(shows)
 })
 
+showsRouter.get('/:id', async (req, res) => {
+    const show1 = await Show.findByPk(req.params.id)
+    res.json(show1)
+})
+
 module.exports = showsRouter
