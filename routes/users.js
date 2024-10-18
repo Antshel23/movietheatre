@@ -23,4 +23,33 @@ usersRouter.get('/:id/shows', async (req, res) => {
     res.json(userShows)
 })
 
+//put shows with users
+usersRouter.put('/:userId/shows/:showId', async (req, res) => {
+
+    //store req.params
+    const {userId, showId} = req.params
+    
+    //locate req.params in models
+    const user = await User.findByPk(userId)
+    const show = await Show.findByPk(showId)
+
+    // error handling if user or show do not exist in models
+    if (!user || !show) {
+        return res.status(404).json({message: 'User or Show does not exist!'})
+    }
+
+    //check association status
+    const userShowState = await user.hasShow(show)
+
+    // addShow and return whether it was updated or created
+    if (userShowState) {
+        await user.addShow(show);
+        return res.status(200).json({message: 'Updated!'})
+    }
+    else {
+        await user.addShow(show);
+        return res.status(201).json({message: 'Created!'})
+    }
+})
+
 module.exports = usersRouter

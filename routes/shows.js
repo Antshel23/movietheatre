@@ -20,7 +20,6 @@ showsRouter.get('/:id/users', async (req, res) => {
     const showUsers = await Show.findByPk(req.params.id, {
         include: User
     })
-
     res.json(showUsers)
 })
 
